@@ -43,3 +43,25 @@
     )
 )
 
+;; User Management
+
+(define-public (register-user (user-hash (buff 32)))
+    (begin
+        (map-set Users
+            { user-id: user-hash }
+            { sessions-attended: u0 }
+        )
+        (ok true)
+    )
+)
+
+(define-public (register-provider (specialization (string-ascii 64)))
+    (begin
+        (map-set Providers
+            { provider-id: tx-sender }
+            { specialization: specialization, sessions-conducted: u0 }
+        )
+        (ok true)
+    )
+)
+
