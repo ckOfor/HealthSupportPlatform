@@ -24,3 +24,22 @@
     { session-id: uint }
     { provider: principal, user-hash: (buff 32), status: (string-ascii 20) }
 )
+
+;; Administrative Functions
+
+(define-public (set-platform-admin (new-admin principal))
+    (begin
+        (asserts! (is-eq tx-sender (var-get platform-admin)) ERR-NOT-AUTHORIZED)
+        (var-set platform-admin new-admin)
+        (ok true)
+    )
+)
+
+(define-public (set-session-fee (new-fee uint))
+    (begin
+        (asserts! (is-eq tx-sender (var-get platform-admin)) ERR-NOT-AUTHORIZED)
+        (var-set session-fee new-fee)
+        (ok true)
+    )
+)
+
