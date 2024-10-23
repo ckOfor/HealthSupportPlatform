@@ -106,3 +106,17 @@
         (ok true)
     )
 )
+
+;; Utility Functions
+
+(define-read-only (get-provider-details (provider-id principal))
+    (map-get? Providers { provider-id: provider-id })
+)
+
+(define-read-only (get-session-details (session-id uint))
+    (map-get? Sessions { session-id: session-id })
+)
+
+(define-read-only (get-user-details (user-hash (buff 32)))
+    (map-get? Users { user-id: user-hash })
+)
