@@ -65,3 +65,22 @@
     )
 )
 
+;; Session Management
+
+(define-public (create-session (user-hash (buff 32)) (provider principal))
+    (let
+        (
+            (new-session-id (+ (var-get session-counter) u1))
+        )
+        (asserts! (is-some (map-get? Users { user-id: user-hash })) ERR-USER-NOT-FOUND)
+        (asserts! (is-some (map-get? Providers { provider-id: provider })) ERR-PROVIDER-NOT-FOUND)
+
+        (map-set Sessions
+            { session-id: new-session-id }
+            { provider: provider, user-hash: user-hash, status: "scheduled" }
+        )
+        (var-set session-counter new-session-id)
+        (ok new-session-id)
+    )
+)
+
