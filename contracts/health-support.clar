@@ -84,3 +84,25 @@
     )
 )
 
+(define-public (complete-session (session-id uint))
+    (let
+        (
+            (session (unwrap! (map-get? Sessions { session-id: session-id }) ERR-SESSION-NOT-FOUND))
+            (provider (get provider session))
+        )
+        ;; Update session status
+        (map-set Sessions
+            { session-id: session-id }
+            (merge session { status: "completed" })
+        )
+
+        ;; Update provider's conducted sessions count
+        (let ((provider-data (unwrap! (map-get? Providers { provider-id: provider }) ERR-PROVIDER-NOT-FOUND)))
+            (map-set Providers
+                { provider-id: provider }
+                (merge provider-data { sessions-conducted: (+ (get sessions-conducted provider-data) u1) })
+            )
+        )
+        (ok true)
+    )
+)
